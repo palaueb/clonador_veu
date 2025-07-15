@@ -1,0 +1,5 @@
+./custom_tts_dataset/
+./segments/
+*.wav
+*.mp3
+*.txt
