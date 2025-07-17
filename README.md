@@ -3,6 +3,8 @@ Aquest projecte et permet preparar les dades necessàries per entrenar un model 
 
 En altres paraules, podràs gravar-te llegint alguns textos, processar aquestes gravacions seguint les instruccions d’aquest repositori, i entrenar un model perquè parli com tu. És útil per aplicacions com assistents virtuals, doblatge automàtic o projectes personals amb veu sintètica personalitzada.
 
+Tota l'ajuda esta pensada per fer-ho en windows, ja que en el meu cas tinc la tarja gràfica en un sistema Windows 11. M'hauria agradat documentar-ho per Linux, ja que em sembla infinitament mes robuts i fàcil de fer tot plegat, però bé, no es pot tenir tot, el focus estaba en fer-ho funcionar.
+
 # Instruccions per preparar l'entorn
 
 Sí, li falta un dockerfile. OK boomer.
@@ -56,6 +58,13 @@ En aquest punt, el sistema necessita que li facilitis un wav amb totes les lectu
 
 ```
 python 01_segmentar.py --input-wav lectures.wav --output-dir segments
+```
+Si tens els audios en diferents fitxers mp3 o wav i et cal, la comanda del ffmpeg per unir-los és:
+
+```
+Get-ChildItem -Filter *.mp3 | Sort-Object Name | ForEach-Object { "file '$($_.FullName)'" } | Set-Content llista.txt
+# un cop tenim la llista.txt feta amb tots els mp3 executem:
+ffmpeg -f concat -safe 0 -i llista.txt -acodec pcm_s16le -ar 16000 -ac 1 sortida.wav
 ```
 
 ## Transcriure els audios
