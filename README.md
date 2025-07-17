@@ -177,6 +177,18 @@ espeak-ng\src\windows>msbuild libespeak-ng.vcxproj /p:Configuration=Release /p:P
 
 Ara ja tenim la DLL a la ruta espeak-ng\src\windows\x64\Release\libespeak-ng.dll
 
+Un cop fet tot això, jo ja m'he arrepentit 20 cops de fer-ho en windows i no fer-ho amb el subsistema linux de windows, segueixo ja per que això ho faig per orgull.
+
+Modifiquem el codi de matcha_vocos_inference.py del codi del repositori del Matxa-TTS:
+```
+import os
+
+os.environ['PHONEMIZER_ESPEAK_LIBRARY'] = "D:\\text-to-voice\\clonador-veu\\libespeak-ng.dll"
+os.environ['ESPEAK_DATA_PATH'] = "D:\\text-to-voice\\espeak-ng\\espeak-ng-data"
+```
+
+Us deixo l'exemple de les rutes que he fet servir jo, no cal que siguin les mateixes, no siguis meló!
+
 # notes
 *un cop tot funcioni, preparar un requirements.txt o environment.yaml (o un dockerfile, jo que se...)*
 
