@@ -107,9 +107,75 @@ Uhm, per algún motiu de seguretat no vaig voler sobreescriure --output-folder s
 
 ## Realitzar l'afinament del model (fine tunning)
 
-Això encara no esta fet, em cal acabar d'entendre quins paràmetres requereix matxa i de quina forma ajustar-ho al que ja tinc fet.
+El procès que segueix aquesta part esta basada en la documentació proporcionada per la branca dev-cat de Matcha-TTS a l'enllaç https://github.com/langtech-bsc/Matcha-TTS/tree/dev-cat#train-with-your-own-dataset
 
-Tot comentari sera benvingut.
+La part de compilar l'espeak es suposa que l'heu d'haver superat, si no us ensortiu, us puc facilitar el binari que he compilat, però no puc garantir cap tipus de compatibilitat amb el vostre sistema operatiu.
+
+A continuació us poso el que heu de fer pas a pas:
+```
+
+
+%USERPROFILE%\miniconda3\Scripts\activate base
+conda create -n matxa python=3.10 -y
+conda activate matxa
+pip install -e .
+```
+
+Dependencies de merda: pip install piper-phonemize -f https://k2-fsa.github.io/icefall/piper_phonemize
+
+compilar la DLL d'espeak-ng: 
+
+```
+espeak-ng\src>git clone https://github.com/espeak-ng/pcaudiolib.git
+```
+Editar fitxer espeak-ng\src\pcaudiolib\src\xaudio2.cpp
+```
+class VoiceCallbacks : public IXAudio2VoiceCallback
+{
+public:
+	void OnBufferEnd(void* pBufferContext) {
+		if (pBufferContext != NULL)
+		{
+			free((void*)pBufferContext);
+		}
+	}
+
+	// Stubs for all interface callbacks
+	void OnStreamEnd() { }
+	void OnVoiceProcessingPassEnd() { }
+	void OnVoiceProcessingPassStart(UINT32 SamplesRequired) { }
+	void OnBufferStart(void* pBufferContext) { }
+	void OnLoopEnd(void* pBufferContext) { }
+	void OnVoiceError(void* pBufferContext, HRESULT Error) { }
+} voiceCallbacks;
+
+# Canviar per:
+
+class VoiceCallbacks : public IXAudio2VoiceCallback
+{
+public:
+	void STDMETHODCALLTYPE OnBufferEnd(void* pBufferContext) override {
+		if (pBufferContext != NULL)
+		{
+			free((void*)pBufferContext);
+		}
+	}
+
+	void STDMETHODCALLTYPE OnStreamEnd() override { }
+	void STDMETHODCALLTYPE OnVoiceProcessingPassEnd() override { }
+	void STDMETHODCALLTYPE OnVoiceProcessingPassStart(UINT32 SamplesRequired) override { }
+	void STDMETHODCALLTYPE OnBufferStart(void* pBufferContext) override { }
+	void STDMETHODCALLTYPE OnLoopEnd(void* pBufferContext) override { }
+	void STDMETHODCALLTYPE OnVoiceError(void* pBufferContext, HRESULT Error) override { }
+} voiceCallbacks;
+
+```
+Seguim amb la compilació
+```
+espeak-ng\src\windows>msbuild libespeak-ng.vcxproj /p:Configuration=Release /p:Platform=x64
+```
+
+Ara ja tenim la DLL a la ruta espeak-ng\src\windows\x64\Release\libespeak-ng.dll
 
 # notes
 *un cop tot funcioni, preparar un requirements.txt o environment.yaml (o un dockerfile, jo que se...)*
