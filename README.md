@@ -12,9 +12,8 @@ Compilar i instal·lar espeak-ng tunejat per projecte aina:
 el readme porta com compilar en linux, per fer-ho en windows usar CYGWIN, instal·lar les dependències per compilar i seguir les mateixes indicacions que per linux.
 Una nota important, no usar multicore (flag -jX) durant el make, ja que no suporta procès en lots i la compilació falla.
 
-Requisits per compilar amb cygwin en windows: 
+Requisits per compilar amb cygwin en windows: https://github.com/projecte-aina/espeak-ng
 autoconf, automake, gcc-core, gcc-g++, gettext-devel, libtool, make, patch i pkg-config.
 
-
-# un cop tot funcioni, preparar un requirements.txt o environment.yaml
+# un cop tot funcioni, preparar un requirements.txt o environment.yaml (o un dockerfile, jo que se...)
 
