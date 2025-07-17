@@ -7,10 +7,12 @@ import argparse
 parser = argparse.ArgumentParser(description="Transcriu segments d'àudio.")
 parser.add_argument("--input-dir", default="segments", help="Carpeta d'entrada dels segments (opcional)")
 parser.add_argument("--model-name", default="projecte-aina/whisper-large-v3-ca-3catparla", help="Nom del model Whisper a utilitzar")
+parser.add_argument("--output-file", default="transcriptions_raw.txt", help="Fitxer de sortida per a les transcripcions")
 args = parser.parse_args()
 
 segments_dir = args.input_dir
 model_name = args.model_name
+output_file = args.output_file
 
 torchaudio.set_audio_backend("soundfile")  # actiu a Windows amb pip install soundfile
 
@@ -48,7 +50,7 @@ for filename in sorted(os.listdir(segments_dir)):
         transcriptions.append((filename, transcription.strip()))
 
 # Guardar transcripció
-with open("transcriptions_raw.txt", "w", encoding="utf-8") as f:
+with open(output_file, "w", encoding="utf-8") as f:
     for fname, text in transcriptions:
         f.write(f"{fname}|{text}\n")
 

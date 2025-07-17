@@ -9,7 +9,7 @@ from scipy.io.wavfile import write
 
 # Parser d'arguments
 parser = argparse.ArgumentParser(description="Segmenta àudio en fragments de veu.")
-parser.add_argument("input_wav", help="Fitxer d'àudio WAV d'entrada")
+parser.add_argument("--input-wav", help="Fitxer d'àudio WAV d'entrada")
 parser.add_argument("--output-dir", default="segments", help="Carpeta de sortida (opcional)")
 args = parser.parse_args()
 
@@ -32,8 +32,8 @@ model, utils = torch.hub.load('snakers4/silero-vad', 'silero_vad', force_reload=
 print("Detectant timestamps amb veu...")
 speech_timestamps = get_speech_timestamps(audio, model, sampling_rate=16000)
 
-# ignorar samples de menys de 0.5 segons
-MIN_SAMPLES = int(0.5 * 16000)
+# ignorar samples de menys de 1 segon
+MIN_SAMPLES = int(1 * 16000)
 
 print("Guardant segments...")
 for i, t in enumerate(speech_timestamps):

@@ -9,22 +9,22 @@ my_tts_dataset/
 ├── metadata.csv
 '''
 parser = argparse.ArgumentParser(description='Preparació de dades per crear el dataset.')
-parser.add_argument('--custom_folder', type=str, default='custom_tts_dataset', help='Nom de la carpeta que generarem.')
-parser.add_argument('--wav_segments', type=str, default='segments', help='Carpeta on es troben els fitxers d\'àudio a processar.')
-parser.add_argument('--train_file', type=str, default='train.txt', help='Fitxer amb les transcripcions de l\'àudio.')
-parser.add_argument('--speaker_id', type=str, default='99', help='ID del parlant.')
+parser.add_argument('--output-folder', type=str, default='custom_tts_dataset', help='Nom de la carpeta que generarem.')
+parser.add_argument('--wav-segments', type=str, default='segments', help='Carpeta on es troben els fitxers d\'àudio a processar.')
+parser.add_argument('--train-file', type=str, default='train.txt', help='Fitxer amb les transcripcions de l\'àudio.')
+parser.add_argument('--speaker-id', type=str, default='9', help='ID del parlant.')
 args = parser.parse_args()
 
-custom_folder = args.custom_folder
+output_folder = args.output_folder
 wav_segments = args.wav_segments
 train_file = args.train_file
 speaker_id = args.speaker_id
 
-if not os.path.exists(custom_folder):
-    audio_folder = os.path.join(custom_folder, 'audio')
+if not os.path.exists(output_folder):
+    audio_folder = os.path.join(output_folder, 'audio')
     os.makedirs(audio_folder, exist_ok=True)
 
-    metadata_file = os.path.join(custom_folder, 'metadata.csv')
+    metadata_file = os.path.join(output_folder, 'metadata.csv')
 
     cf=open(metadata_file, 'w', encoding='utf-8')
     cf.write('file,text,speaker_id\n')
@@ -43,6 +43,6 @@ if not os.path.exists(custom_folder):
             
         print("\rPreparació de dades completada.", end='', flush=True)
         print(f"\nFitxer de metadades creat a {metadata_file}.")
-        print(f"Fitxers d'àudio copiats a {os.path.join(custom_folder, 'audio')}.")
+        print(f"Fitxers d'àudio copiats a {os.path.join(output_folder, 'audio')}.")
 else:
-    print("The custom_tts_dataset folder already exists.")
+    print(f"The {output_folder} folder already exists.")
